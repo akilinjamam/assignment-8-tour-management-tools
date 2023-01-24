@@ -17,7 +17,30 @@ module.exports.getTours = async (req, res, next) => {
 
     try {
 
-        const result = await getToursServices()
+        let filters = { ...req.query };
+        console.log(req.query);
+        let quries = {};
+        if (req.query.field) {
+            const quiredData = req.query.field.split(',').join(' ');
+            quries.field = quiredData;
+            console.log(quiredData);
+        }
+
+
+
+        if (req.query.page) {
+            const { limit = 10, page = 1 } = req.query;
+            const skip = (page - 1) * +limit;
+            quries.skip = skip
+            quries.limit = +limit
+        };
+
+        if (req.query.sort) {
+            quries.sort = req.query.sort.split(',').join(' ');
+        }
+
+
+        const result = await getToursServices(filters, quries)
 
         res.status(200).json({ status: true, message: 'data-found successfully', tours: result });
     } catch (err) {

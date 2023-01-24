@@ -6,8 +6,20 @@ module.exports.saveToursService = async (data) => {
     return tours;
 }
 
-module.exports.getToursServices = async () => {
-    const tours = await Tours.find({})
+module.exports.getToursServices = async (filters, queries) => {
+    const tours = await Tours.find(filters)
+        .select(queries.field)
+        .skip(queries.skip)
+        .limit(queries.limit)
+        .sort(queries.sort)
 
-    return tours;
+    const totalTourismPlace = await Tours.countDocuments(filters);
+    const totalPage = Math.ceil(totalTourismPlace / queries.limit);
+
+    if (!totalPage) {
+        const totalPage = 'no page is given yet bro..'
+        return { totalTourismPlace, totalPage, tours };
+    }
+
+    return { totalTourismPlace, totalPage, tours };
 }
