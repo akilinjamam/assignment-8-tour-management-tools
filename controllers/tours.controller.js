@@ -1,4 +1,4 @@
-const { saveToursService, getToursServices } = require("../services/tours.services");
+const { saveToursService, getToursServices, getTourIdService, updateToursByIdService } = require("../services/tours.services");
 
 module.exports.saveTours = async (req, res, next) => {
 
@@ -43,6 +43,39 @@ module.exports.getTours = async (req, res, next) => {
         const result = await getToursServices(filters, quries)
 
         res.status(200).json({ status: true, message: 'data-found successfully', tours: result });
+    } catch (err) {
+        res.status(400).json({ status: false, error: err, message: 'its error bro..' })
+    }
+}
+
+
+module.exports.getToursById = async (req, res, next) => {
+
+    try {
+        const { id } = req.params;
+        const result = await getTourIdService(id)
+
+        res.status(200).json({ status: true, message: 'id is found successfully', tours: result });
+    } catch (err) {
+        res.status(400).json({ status: false, error: err, message: 'its error bro..' })
+    }
+}
+module.exports.updateToursById = async (req, res, next) => {
+
+    try {
+        const { id } = req.params;
+
+
+        const result = await updateToursByIdService(id, req.body);
+
+
+
+        if (!result.matchedCount) {
+
+            return res.status(400).json({ status: 'failed', error: 'id is not matched' })
+        }
+
+        res.status(200).json({ status: true, message: 'id is updated successfully', tours: result });
     } catch (err) {
         res.status(400).json({ status: false, error: err, message: 'its error bro..' })
     }

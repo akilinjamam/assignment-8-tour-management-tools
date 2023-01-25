@@ -23,6 +23,9 @@ const tourServiceSchema = mongoose.Schema(
             type: String,
             required: true
         },
+        view: {
+            type: Number
+        }
     }, {
     timestamps: true
 }

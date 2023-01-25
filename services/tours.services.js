@@ -1,10 +1,21 @@
 const Tours = require("../models/tourServices")
 
+
+
+let count = 0;
+async function allData(id) {
+    const getAll = await Tours.findOne({ _id: id });
+    return count = getAll.__v
+}
+
+
 module.exports.saveToursService = async (data) => {
     const tours = await Tours.create(data);
 
     return tours;
 }
+
+
 
 module.exports.getToursServices = async (filters, queries) => {
     const tours = await Tours.find(filters)
@@ -22,4 +33,29 @@ module.exports.getToursServices = async (filters, queries) => {
     }
 
     return { totalTourismPlace, totalPage, tours };
+}
+
+module.exports.getTourIdService = async (id) => {
+    if (id) {
+        console.log(count)
+        let newCount = await allData(id);
+        count = newCount
+        count++
+        console.log(count)
+    }
+
+    const newResult = await Tours.updateOne({ _id: id }, { $set: { __v: count } })
+    console.log(newResult);
+
+    const result = await Tours.findById({ _id: id });
+
+    return result
+}
+
+module.exports.updateToursByIdService = async (id, data) => {
+    const result = await Tours.updateOne(
+        { _id: id },
+        { $set: data },
+        { runValidators: true });
+    return result
 }
