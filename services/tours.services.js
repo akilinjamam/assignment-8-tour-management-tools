@@ -1,7 +1,6 @@
 const Tours = require("../models/tourServices")
 
 
-
 let count = 0;
 async function allData(id) {
     const getAll = await Tours.findOne({ _id: id });
@@ -15,11 +14,9 @@ module.exports.saveToursService = async (data) => {
     return tours;
 }
 
-
-
 module.exports.getToursServices = async (filters, queries) => {
     const tours = await Tours.find(filters)
-        .select(queries.field)
+        .select(`${queries.fields} ${queries.fields === '_id' ? '_id' : '-_id'} `)
         .skip(queries.skip)
         .limit(queries.limit)
         .sort(queries.sort)
@@ -58,4 +55,14 @@ module.exports.updateToursByIdService = async (id, data) => {
         { $set: data },
         { runValidators: true });
     return result
+}
+
+module.exports.getTopViewedIdService = async () => {
+    const result = await Tours.find({}).sort('__V').limit(3);
+    return result;
+}
+
+module.exports.getCheapestToursService = async () => {
+    const result = await Tours.find({}).sort('price').limit(3);
+    return result;
 }

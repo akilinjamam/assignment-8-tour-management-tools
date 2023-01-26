@@ -22,10 +22,8 @@ const tourServiceSchema = mongoose.Schema(
         image: {
             type: String,
             required: true
-        },
-        view: {
-            type: Number
         }
+
     }, {
     timestamps: true
 }
