@@ -16,7 +16,7 @@ module.exports.saveToursService = async (data) => {
 
 module.exports.getToursServices = async (filters, queries) => {
     const tours = await Tours.find(filters)
-        .select(`${queries.fields} ${queries.fields === '_id' ? '_id' : '-_id'} `)
+        .select(queries.fields)
         .skip(queries.skip)
         .limit(queries.limit)
         .sort(queries.sort)

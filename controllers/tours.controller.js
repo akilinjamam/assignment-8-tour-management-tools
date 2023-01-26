@@ -45,6 +45,7 @@ module.exports.getTours = async (req, res, next) => {
 
         res.status(200).json({ status: true, message: 'data-found successfully', tours: result });
     } catch (err) {
+
         res.status(400).json({ status: false, error: err, message: 'its error bro..' })
     }
 }
